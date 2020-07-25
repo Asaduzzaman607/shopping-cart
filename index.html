@@ -25,11 +25,11 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="minusButton1" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" id="phoneQuantity" class="form-control text-center" value="1">
-                           <button id="plusButton1" class="btn btn-default"><i class="fas fa-plus "></i></button>
+                           <button onclick="handleProductQuantity('phone', false);" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input type="text" id="phone-quantity" class="form-control text-center" value="1">
+                           <button onclick="handleProductQuantity('phone', true);" class="btn btn-default"><i class="fas fa-plus "></i></button>
                         </div>
-                        <h5>$<span id="currentPrice">1219</span> </h5>
+                        <h5>$<span id='phone-price'>1219</span> </h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -43,12 +43,12 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="minusButton2" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input id="caseQuantity" type="text" class="form-control text-center" value="1">
-                           <button id="plusButton2" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button onclick="handleProductQuantity('case',false);" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input id="case-quantity" type="text" class="form-control text-center" value="1">
+                           <button onclick="handleProductQuantity('case',true);" class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$ <span id="casePrice" >59</span></h5>
+                        <h5>$ <span id='case-price' >59</span></h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -79,88 +79,134 @@
    </section>
 
    <script>
-      //phone quantity plus section
+      //phone quantity plus-minus section
+      
+      
+      function handleProductQuantity(product, isIncrease){
+         const countNumber = document.getElementById(product + '-quantity')
+         const updateNumber = parseInt(countNumber.value);
 
-      const plusButton1 = document.getElementById("plusButton1")
-         plusButton1.addEventListener("click", function(){
-         const countNumber = document.getElementById("phoneQuantity").value
-         const updateNumber = parseInt(countNumber);
-         let finalQuantity =  updateNumber + 1;
-         document.getElementById("phoneQuantity").value = finalQuantity;
+         let finalQuantity=updateNumber;
 
-         const currentPrice = document.getElementById("currentPrice").innerText
-         const updateIntPrice = parseInt(currentPrice);
-         let newPrice = finalQuantity * 1219;
-         document.getElementById("currentPrice").innerText= newPrice;
-         const TotalPrice = totalPrice();
-  
+         if (isIncrease==true){
+            finalQuantity =  updateNumber + 1;
 
-      })
+         }
+         if(isIncrease==false && updateNumber>0){
+            finalQuantity =  updateNumber - 1;
+
+         }
+         countNumber.value = finalQuantity;
+
+      
+         let newPrice = 0;
+         if(product == 'phone'){
+            newPrice = finalQuantity * 1219;
+         }
+         if(product == 'case'){
+            newPrice = finalQuantity * 59;
+         }
+         document.getElementById(product+'-price').innerText= newPrice;
+         
+         totalPrice();
+      }
+
+         //total price
+         function totalPrice(){
+         const mobileQuantity= document.getElementById("phone-quantity")
+         const mobileIntQuantity = parseInt(mobileQuantity.value);
+         const caseQuantity = document.getElementById("case-quantity")
+         const caseIntQuantity=parseInt(caseQuantity.value);
+
+         const totalPriceAmount = mobileIntQuantity * 1219 + caseIntQuantity * 59;     
+         document.getElementById("currentSubTotal").innerText= totalPriceAmount;
+         
+
+         
+         const tax = totalPriceAmount * 0.1;
+         const totalTax = Math.round(tax);
+
+         document.getElementById("currentTax").innerText = totalTax;
+         const grandTotal = totalPriceAmount+ totalTax;
+         document.getElementById("currentTotal").innerText= grandTotal;
+
+         return totalPriceAmount; 
+      }
 
       // for phone quantity minus
-      const minusButton1 = document.getElementById("minusButton1")
-      minusButton1.addEventListener("click", function(){
-         const countNumber = document.getElementById("phoneQuantity").value;
-         const updateNumber = parseInt(countNumber);
-         let finalQuantity =  updateNumber - 1;
-         if(finalQuantity >0){
-            document.getElementById("phoneQuantity").value = finalQuantity;
-         const currentPrice = document.getElementById("currentPrice").innerText
-         const updateIntPrice = parseInt(currentPrice);
-         let newPrice = finalQuantity * 1219;
-         document.getElementById("currentPrice").innerText= newPrice;
-         }
-         const TotalPrice = totalPrice();
+      
+     
 
-      })
+      // const plusButton1 = document.getElementById("plusButton1")
+      //    plusButton1.addEventListener("click", function(){
+      //    const countNumber = document.getElementById("phoneQuantity")
+      //    const updateNumber = parseInt(countNumber.value);
+      //    let finalQuantity =  updateNumber + 1;
+      //    countNumber.value = finalQuantity;
+
+      
+      //    let newPrice = finalQuantity * 1219;
+      //    const currentPrice = document.getElementById("currentPrice").innerText= newPrice;
+         
+      //    const TotalPrice = totalPrice();
+  
+
+      // })
+
+      // // for phone quantity minus
+      // const minusButton1 = document.getElementById("minusButton1")
+      // minusButton1.addEventListener("click", function(){
+      //    const countNumber = document.getElementById("phoneQuantity").value;
+      //    const updateNumber = parseInt(countNumber);
+      //    let finalQuantity =  updateNumber - 1;
+      //    if(finalQuantity >0){
+      //       document.getElementById("phoneQuantity").value = finalQuantity;
+      //    const currentPrice = document.getElementById("currentPrice").innerText
+      //    const updateIntPrice = parseInt(currentPrice);
+      //    let newPrice = finalQuantity * 1219;
+      //    document.getElementById("currentPrice").innerText= newPrice;
+      //    }
+      //    const TotalPrice = totalPrice();
+
+      // })
 
       //for case quantity plus 
 
-      const plusButton2 = document.getElementById("plusButton2")
-         plusButton2.addEventListener("click", function(){
-         const countNumber = document.getElementById("caseQuantity").value
-         const updateNumber = parseInt(countNumber);
-         let finalQuantity =  updateNumber + 1;
-         document.getElementById("caseQuantity").value = finalQuantity;
+      // const plusButton2 = document.getElementById("plusButton2")
+      //    plusButton2.addEventListener("click", function(){
+      //    const countNumber = document.getElementById("caseQuantity").value
+      //    const updateNumber = parseInt(countNumber);
+      //    let finalQuantity =  updateNumber + 1;
+      //    document.getElementById("caseQuantity").value = finalQuantity;
 
-         const casePrice = document.getElementById("casePrice").innerText
-         const updateIntPrice = parseInt(casePrice);
-         let newCasePrice = finalQuantity * 59;
-         document.getElementById("casePrice").innerText= newCasePrice;
-         const TotalPrice = totalPrice();
+      //    const casePrice = document.getElementById("casePrice").innerText
+      //    const updateIntPrice = parseInt(casePrice);
+      //    let newCasePrice = finalQuantity * 59;
+      //    document.getElementById("casePrice").innerText= newCasePrice;
+      //    const TotalPrice = totalPrice();
   
 
-      })
+      // })
 
-      //for case quantity minus
-      const minusButton2 = document.getElementById("minusButton2")
-      minusButton2.addEventListener("click", function(){
-         const countNumber = document.getElementById("caseQuantity").value;
-         const updateNumber = parseInt(countNumber);
-         let finalQuantity =  updateNumber - 1;
-         if(finalQuantity >0){
-            document.getElementById("caseQuantity").value = finalQuantity;
-         const casePrice = document.getElementById("casePrice").innerText
-         const updateIntPrice = parseInt(casePrice);
-         let newCasePrice = finalQuantity * 59;
-         document.getElementById("casePrice").innerText= newCasePrice;
-         }
-         const TotalPrice = totalPrice();
+      // //for case quantity minus
+      // const minusButton2 = document.getElementById("minusButton2")
+      // minusButton2.addEventListener("click", function(){
+      //    const countNumber = document.getElementById("caseQuantity").value;
+      //    const updateNumber = parseInt(countNumber);
+      //    let finalQuantity =  updateNumber - 1;
+      //    if(finalQuantity >0){
+      //       document.getElementById("caseQuantity").value = finalQuantity;
+      //    const casePrice = document.getElementById("casePrice").innerText
+      //    const updateIntPrice = parseInt(casePrice);
+      //    let newCasePrice = finalQuantity * 59;
+      //    document.getElementById("casePrice").innerText= newCasePrice;
+      //    }
+      //    const TotalPrice = totalPrice();
 
       
-      })
+      // })
 
-      //total price
-      function totalPrice(){
-         const mobilePrice = document.getElementById("currentPrice").innerText
-         const mobileIntPrice = parseFloat(mobilePrice);
-         const casePrice = document.getElementById("casePrice").innerText
-         const caseIntPrice=parseFloat(casePrice);
-         const totalPriceAmount = mobileIntPrice + caseIntPrice;     
-         document.getElementById("currentSubTotal").innerText = totalPriceAmount;
-         document.getElementById("currentTotal").innerText = totalPriceAmount;
-         return totalPriceAmount; 
-      }
+
 
 
 
